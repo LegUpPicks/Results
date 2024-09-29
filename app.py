@@ -71,3 +71,4 @@ calendar_data['Date'] = pd.to_datetime(calendar_data['Date'])
 # st.subheader("Units by Day")
 # st.write(calendar_df.pivot("Date", "Units_W_L", "Color").style.applymap(lambda x: f'background-color: {x}'))
 
+st.dataframe(df)
