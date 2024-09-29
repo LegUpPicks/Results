@@ -6,11 +6,12 @@ import calendar
 import numpy as np
 from streamlit_gsheets import GSheetsConnection
 
+st.set_page_config(layout="wide")
 url = "https://docs.google.com/spreadsheets/d/1XoVHcy6qqwKKT7HiIb5CKwv32_1Ce1fhl5XoPW-lREI/edit?usp=sharing"
 
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-df = conn.read(spreadsheet=url, usecols=[0,1,2,3,4,5,6,7])
+df = conn.read(spreadsheet=url, usecols=[0, 1, 2, 3, 4, 5, 6, 7])
 
 # Convert 'Date' column to datetime
 df['Date'] = pd.to_datetime(df['Date'])
@@ -51,6 +52,9 @@ summary_table = df.groupby('Sport')['Units_W_L'].sum().reset_index()
 summary_table.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 summary_table['Units'] = summary_table['Units'].round(2)
 
+# Sort summary table by Units descending
+summary_table = summary_table.sort_values(by='Units', ascending=False)
+
 st.subheader("Units Summary by Sport")
 st.table(summary_table)
 
@@ -58,17 +62,8 @@ st.table(summary_table)
 calendar_data = df.groupby(df['Date'].dt.date)['Units_W_L'].sum().reset_index()
 calendar_data['Date'] = pd.to_datetime(calendar_data['Date'])
 
-# # Create a calendar matrix
-# start_date = calendar_data['Date'].min()
-# end_date = calendar_data['Date'].max()
-# date_range = pd.date_range(start=start_date, end=end_date)
-# calendar_df = pd.DataFrame(date_range, columns=['Date']).merge(calendar_data, on='Date', how='left').fillna(0)
+# Sort the dataframe by Date descending
+df = df.sort_values(by='Date', ascending=False)
 
-# # Color coding for calendar
-# calendar_df['Color'] = np.where(calendar_df['Units_W_L'] > 0, 'green', 'red')
-
-# # Display calendar
-# st.subheader("Units by Day")
-# st.write(calendar_df.pivot("Date", "Units_W_L", "Color").style.applymap(lambda x: f'background-color: {x}'))
-
+st.header('Full Data')
 st.dataframe(df)
