@@ -1,6 +1,4 @@
-Test# BetTracker Streamlit App
-
-![Company Logo](legup.png)
+<img src="legup.png" alt="Company Logo" width="200"/>
 
 ## Overview
 
