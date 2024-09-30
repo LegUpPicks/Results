@@ -25,6 +25,16 @@ selected_sport = st.sidebar.selectbox('Select Sport', options=['All'] + list(spo
 if selected_sport != 'All':
     df = df[df['Sport'] == selected_sport]
 
+# Sidebar for date filtering
+date_range = st.sidebar.date_input("Select Date Range", [df['Date'].min(), df['Date'].max()])
+
+# Check if both dates are selected
+if len(date_range) == 2:
+    start_date, end_date = date_range
+    df = df[(df['Date'] >= pd.to_datetime(start_date)) & (df['Date'] <= pd.to_datetime(end_date))]
+else:
+    st.sidebar.warning("Please select both start and end dates.")
+
 # Calculations for summary statistics
 w_count = (df['Win_Loss_Push'] == 'w').sum()
 l_count = (df['Win_Loss_Push'] == 'l').sum()
