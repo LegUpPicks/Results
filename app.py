@@ -14,38 +14,34 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 
 df = conn.read(spreadsheet=url, usecols=[0, 1, 2, 3, 4, 5, 6, 7])
 
-# Convert 'Date' column to datetime
 df['Date'] = pd.to_datetime(df['Date'])
 
-# Sidebar for sport filtering
+# Sidebar
 sports = df['Sport'].unique()
 selected_sport = st.sidebar.selectbox('Select Sport', options=['All'] + list(sports))
 
-# Filter data based on selected sport
+# Filter by sport
 if selected_sport != 'All':
     df = df[df['Sport'] == selected_sport]
 
-# Sidebar for date filtering
+# Date filter
 date_range = st.sidebar.date_input("Select Date Range", [df['Date'].min(), df['Date'].max()])
 
-# Check if both dates are selected
 if len(date_range) == 2:
     start_date, end_date = date_range
     df = df[(df['Date'] >= pd.to_datetime(start_date)) & (df['Date'] <= pd.to_datetime(end_date))]
 else:
     st.sidebar.warning("Please select both start and end dates.")
 
-# Calculations for summary statistics
+# Summary stats
 w_count = (df['Win_Loss_Push'] == 'w').sum()
 l_count = (df['Win_Loss_Push'] == 'l').sum()
 p_count = (df['Win_Loss_Push'] == 'p').sum()
 total_records = w_count + l_count + p_count  # Total wins, losses, and pushes
 
-# Calculate win percentage based on total records
 win_percentage = (w_count / total_records) * 100 if total_records > 0 else 0
 total_units = df['Units_W_L'].sum()
 
-# Display summary statistics with rounding
 st.image('legup.png', width = 200)
 st.header("Summary Statistics")
 
@@ -65,19 +61,19 @@ with col4:
 
 with col5:
     st.metric("Total Units", f"{total_units:.2f}")
-# Cumulative units line chart
+
+# Cumulative units chart
 df_cumulative = df.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
 df_cumulative.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 
 fig = px.line(df_cumulative, x='Date', y='Units', title='Cumulative Units Over Time')
 st.plotly_chart(fig)
 
-# Summary table by sport
+# Summary table
 summary_table = df.groupby('Sport')['Units_W_L'].sum().reset_index()
 summary_table.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 summary_table['Units'] = summary_table['Units'].round(2)
 
-# Sort summary table by Units descending
 summary_table = summary_table.sort_values(by='Units', ascending=False)
 
 st.subheader("Units Summary by Sport")
@@ -87,11 +83,9 @@ st.table(summary_table)
 calendar_data = df.groupby(df['Date'].dt.date)['Units_W_L'].sum().reset_index()
 calendar_data['Date'] = pd.to_datetime(calendar_data['Date'])
 
-# Sort the dataframe by Date descending
 df = df.sort_values(by='Date', ascending=False)
 
 st.header('Full Data')
-# Format the Date column
+
 df['Date'] = df['Date'].dt.strftime('%m/%d/%Y')
-# Display the DataFrame
 st.dataframe(df)
