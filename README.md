@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Streamlit application allows users to efficiently track their betting activities, monitor win percentages, and calculate cumulative units won. Whether you’re a casual bettor or a serious bettor, this app provides the tools you need to stay on top of your game.  Remember consistency and unit sizing is key to having success in sports betting.
+This Streamlit application allows users to efficiently track their betting activities, monitor win percentages, and calculate cumulative units won live from a google doc. Whether you’re a casual bettor or a serious bettor, this app provides statistics you need to calculate your true performance.  Remember consistency and unit sizing is key to having success in sports betting.
 
 ## Features
 
@@ -20,4 +20,4 @@ Make sure you have the following installed on your machine:
 - Python 3.10 or later
 - Packages from the requirements.txt
 - A google doc link that is viewable, and has a similar structure to ours
-- replace the url of the google doc in the code with yours
+- Replace the url of the google doc in the code with yours
