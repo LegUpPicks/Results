@@ -66,8 +66,23 @@ with col5:
 df_cumulative = df.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
 df_cumulative.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 
+# Calculate the min and max of the cumulative units for dynamic y-axis scaling
+y_min = df_cumulative['Units'].min() - 10  # You can adjust the padding
+y_max = df_cumulative['Units'].max() + 10  # Adjust padding to make sure the graph isn't too tight
+
+# Create the plot with dynamic y-axis range
 fig = px.line(df_cumulative, x='Date', y='Units', title='Cumulative Units Over Time')
+
+# Set dynamic y-axis range
+fig.update_layout(
+    yaxis=dict(
+        range=[y_min, y_max]
+    )
+)
+
+# Display the plot
 st.plotly_chart(fig)
+
 
 # Summary table
 summary_table = df.groupby('Sport')['Units_W_L'].sum().reset_index()
