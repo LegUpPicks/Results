@@ -68,14 +68,13 @@ with col5:
 df_cumulative = df.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
 df_cumulative.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 
-# Calculate the min and max of the cumulative units for dynamic y-axis scaling
+# Calculate the min and max
 y_min = df_cumulative['Units'].min() - 10  # You can adjust the padding
 y_max = df_cumulative['Units'].max() + 10  # Adjust padding to make sure the graph isn't too tight
 
-# Create the plot with dynamic y-axis range
 fig = px.line(df_cumulative, x='Date', y='Units', title='Cumulative Units Over Time')
 
-# Set dynamic y-axis range
+# Set dynamic y-axis
 fig.update_layout(
     yaxis=dict(
         range=[y_min, y_max]
@@ -114,7 +113,6 @@ df_daily_sum = df.groupby('Date')['Units_W_L'].sum().reset_index()
 # Create Bar Chart using Plotly
 fig = go.Figure()
 
-# Add bars for positive and negative Units_W_L
 fig.add_trace(go.Bar(
     x=df_daily_sum['Date'],
     y=df_daily_sum['Units_W_L'],
@@ -124,7 +122,6 @@ fig.add_trace(go.Bar(
     hoverinfo='x+y+text',  # Show date, value and text (rounded units)
 ))
 
-# Customize layout for cleaner appearance
 fig.update_layout(
     title='Daily Units Won / Lost',
     xaxis_title='Date',
@@ -134,5 +131,4 @@ fig.update_layout(
     xaxis_tickangle=-45,  # Rotate x-axis labels for better readability
 )
 
-# Show the plot in Streamlit
 st.plotly_chart(fig)
