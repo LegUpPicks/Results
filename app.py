@@ -1,6 +1,8 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from datetime import datetime
 import calendar
 import numpy as np
@@ -83,7 +85,6 @@ fig.update_layout(
 # Display the plot
 st.plotly_chart(fig)
 
-
 # Summary table
 summary_table = df.groupby('Sport')['Units_W_L'].sum().reset_index()
 summary_table.rename(columns={'Units_W_L': 'Units'}, inplace=True)
@@ -104,3 +105,37 @@ st.header('Full Data')
 
 df['Date'] = df['Date'].dt.strftime('%m/%d/%Y')
 st.dataframe(df)
+
+
+# Sum the Units_W_L for each day
+df['Date'] = df['Date']  # Convert to date to group by day
+df_daily_sum = df.groupby('Date')['Units_W_L'].sum().reset_index()
+
+# Display the daily summed data
+st.write("### Daily Units Won / Lost", df_daily_sum)
+
+# Create Bar Chart using Plotly
+fig = go.Figure()
+
+# Add bars for positive and negative Units_W_L
+fig.add_trace(go.Bar(
+    x=df_daily_sum['Date'],
+    y=df_daily_sum['Units_W_L'],
+    marker=dict(color=df_daily_sum['Units_W_L'].apply(lambda x: 'green' if x > 0 else 'red')),
+    text=df_daily_sum['Units_W_L'].round(2),
+    textposition='auto',
+    hoverinfo='x+y+text',  # Show date, value and text (rounded units)
+))
+
+# Customize layout for cleaner appearance
+fig.update_layout(
+    title='Daily Units Won / Lost',
+    xaxis_title='Date',
+    yaxis_title='Units Won / Lost',
+    showlegend=False,  # We don't need a legend
+    template='plotly_white',  # Cleaner theme
+    xaxis_tickangle=-45,  # Rotate x-axis labels for better readability
+)
+
+# Show the plot in Streamlit
+st.plotly_chart(fig)
