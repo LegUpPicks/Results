@@ -111,9 +111,6 @@ st.dataframe(df)
 df['Date'] = df['Date']  # Convert to date to group by day
 df_daily_sum = df.groupby('Date')['Units_W_L'].sum().reset_index()
 
-# Display the daily summed data
-st.write("### Daily Units Won / Lost", df_daily_sum)
-
 # Create Bar Chart using Plotly
 fig = go.Figure()
 
