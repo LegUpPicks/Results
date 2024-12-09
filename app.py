@@ -64,46 +64,69 @@ with col4:
 with col5:
     st.metric("Total Units", f"{total_units:.2f}")
 
-# Cumulative units chart
+# Calculate cumulative units chart
 df_cumulative = df.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
 df_cumulative.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 
-# Calculate the min and max of the cumulative units for dynamic y-axis scaling
-y_min = df_cumulative['Units'].min() - 10  # You can adjust the padding
-y_max = df_cumulative['Units'].max() + 10  # Adjust padding to make sure the graph isn't too tight
+# Min and Max of the cumulative units for dynamic y-axis scaling
+y_min = df_cumulative['Units'].min() - 10
+y_max = df_cumulative['Units'].max() + 10
 
 # Sum the Units_W_L for each day
-df['Date'] = df['Date']  # Convert to date to group by day
 df_daily_sum = df.groupby('Date')['Units_W_L'].sum().reset_index()
 
-# Display the daily summed data
-#st.write("### Daily Units Won / Lost", df_daily_sum)
+# Create Daily Bar Chart using Plotly
+fig_daily = go.Figure()
 
-# Create Bar Chart using Plotly
-fig = go.Figure()
-
-# Add bars for positive and negative Units_W_L
-fig.add_trace(go.Bar(
+# Add bars for positive and negative Units_W_L (Green for wins, Red for losses)
+fig_daily.add_trace(go.Bar(
     x=df_daily_sum['Date'],
     y=df_daily_sum['Units_W_L'],
     marker=dict(color=df_daily_sum['Units_W_L'].apply(lambda x: 'green' if x > 0 else 'red')),
     text=df_daily_sum['Units_W_L'].round(2),
     textposition='auto',
-    hoverinfo='x+y+text',  # Show date, value and text (rounded units)
+    hoverinfo='x+y+text',
 ))
 
-# Customize layout for cleaner appearance
-fig.update_layout(
+# Customize daily bar chart
+fig_daily.update_layout(
     title='Daily Units Won / Lost',
     xaxis_title='Date',
     yaxis_title='Units Won / Lost',
-    showlegend=False,  # We don't need a legend
-    template='plotly_white',  # Cleaner theme
-    xaxis_tickangle=-45,  # Rotate x-axis labels for better readability
+    showlegend=False,
+    template='plotly_white',
+    xaxis_tickangle=-45,
 )
 
-# Show the plot in Streamlit
-st.plotly_chart(fig)
+# Create Weekly Bar Chart using Plotly
+df['Week'] = df['Date'].dt.to_period('W').dt.start_time  # Convert dates to start of the week
+df_weekly_sum = df.groupby('Week')['Units_W_L'].sum().reset_index()
+
+fig_weekly = go.Figure()
+
+# Add bars for weekly data (Green for wins, Red for losses)
+fig_weekly.add_trace(go.Bar(
+    x=df_weekly_sum['Week'],
+    y=df_weekly_sum['Units_W_L'],
+    marker=dict(color=df_weekly_sum['Units_W_L'].apply(lambda x: 'green' if x > 0 else 'red')),
+    text=df_weekly_sum['Units_W_L'].round(2),
+    textposition='auto',
+    hoverinfo='x+y+text',
+))
+
+# Customize weekly bar chart
+fig_weekly.update_layout(
+    title='Weekly Units Won / Lost',
+    xaxis_title='Week',
+    yaxis_title='Units Won / Lost',
+    showlegend=False,
+    template='plotly_white',
+    xaxis_tickangle=-45,
+)
+
+# Display the weekly and daily charts
+st.plotly_chart(fig_weekly)  # Display weekly chart above the daily chart
+st.plotly_chart(fig_daily)  # Display daily chart below the weekly chart
 
 # Summary table
 summary_table = df.groupby('Sport')['Units_W_L'].sum().reset_index()
