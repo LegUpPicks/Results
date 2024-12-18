@@ -48,6 +48,36 @@ total_records_potd = w_count_potd + l_count_potd + p_count_potd  # Total wins, l
 win_percentage_potd = (w_count_potd / total_records_potd) * 100 if total_records_potd > 0 else 0
 total_units_potd = df_potd['Units_W_L'].sum()
 
+
+# Continue with existing code to display overall summary stats
+w_count = (df['Win_Loss_Push'] == 'w').sum()
+l_count = (df['Win_Loss_Push'] == 'l').sum()
+p_count = (df['Win_Loss_Push'] == 'p').sum()
+total_records = w_count + l_count + p_count  # Total wins, losses, and pushes
+
+win_percentage = (w_count / total_records) * 100 if total_records > 0 else 0
+total_units = df['Units_W_L'].sum()
+
+# Continue with existing overall summary section
+st.header("Summary Statistics Overall")
+
+col1, col2, col3, col4, col5 = st.columns(5)
+
+with col1:
+    st.metric("Total Wins", w_count)
+    
+with col2:
+    st.metric("Total Losses", l_count)
+
+with col3:
+    st.metric("Total Pushes", p_count)
+
+with col4:
+    st.metric("Win Percentage", f"{win_percentage:.2f}%")
+
+with col5:
+    st.metric("Total Units", f"{total_units:.2f}")
+
 # Display POTD stats
 st.header("POTD Summary Statistics")
 
@@ -67,35 +97,6 @@ with col4:
 
 with col5:
     st.metric("Total Units (POTD)", f"{total_units_potd:.2f}")
-
-# Continue with existing code to display overall summary stats
-w_count = (df['Win_Loss_Push'] == 'w').sum()
-l_count = (df['Win_Loss_Push'] == 'l').sum()
-p_count = (df['Win_Loss_Push'] == 'p').sum()
-total_records = w_count + l_count + p_count  # Total wins, losses, and pushes
-
-win_percentage = (w_count / total_records) * 100 if total_records > 0 else 0
-total_units = df['Units_W_L'].sum()
-
-# Continue with existing overall summary section
-st.header("Summary Statistics")
-
-col1, col2, col3, col4, col5 = st.columns(5)
-
-with col1:
-    st.metric("Total Wins", w_count)
-    
-with col2:
-    st.metric("Total Losses", l_count)
-
-with col3:
-    st.metric("Total Pushes", p_count)
-
-with col4:
-    st.metric("Win Percentage", f"{win_percentage:.2f}%")
-
-with col5:
-    st.metric("Total Units", f"{total_units:.2f}")
 
 # Calculate cumulative units chart
 df_cumulative = df.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
@@ -157,9 +158,9 @@ fig_weekly.update_layout(
     xaxis_tickangle=-45,
 )
 
-# Display the weekly and daily charts
-st.plotly_chart(fig_weekly)  # Display weekly chart above the daily chart
+# Display the weekly and daily 
 st.plotly_chart(fig_daily)  # Display daily chart below the weekly chart
+st.plotly_chart(fig_weekly)  # Display weekly chart above the daily chart
 
 # Summary table
 summary_table = df.groupby('Sport')['Units_W_L'].sum().reset_index()
