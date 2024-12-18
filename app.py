@@ -15,7 +15,7 @@ url = "https://docs.google.com/spreadsheets/d/1XoVHcy6qqwKKT7HiIb5CKwv32_1Ce1fhl
 
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-df = conn.read(spreadsheet=url, usecols=[0, 1, 2, 3, 4, 5, 6, 7])
+df = conn.read(spreadsheet=url, usecols=[0, 1, 2, 3, 4, 5, 6, 7,8])
 
 df['Date'] = pd.to_datetime(df['Date'])
 
