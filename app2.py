@@ -164,7 +164,7 @@ win_percentage = (w_count / total_records) * 100 if total_records > 0 else 0
 total_units = df_filtered['Units_W_L'].sum()
 
 #st.image('legup.png', width = 200)
-st.header("Summary Statistics >2U")
+st.header("Summary Statistics 2U or greater")
 
 col1, col2, col3, col4, col5 = st.columns(5)
 
