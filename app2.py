@@ -125,8 +125,8 @@ fig_weekly.update_layout(
     xaxis_tickangle=-45,
 )
 
-# Filter data where Units_W_L is greater than or equal to 3
-df_filtered = df[df['Units_W_L'] >= 3]
+# Filter data where Units_W_L is greater than or equal to 2
+df_filtered = df[df['Units_W_L'] >= 2]
 
 # Sum the filtered Units_W_L for each day
 df_daily_filtered_sum = df_filtered.groupby('Date')['Units_W_L'].sum().reset_index()
@@ -146,13 +146,42 @@ fig_daily_filtered.add_trace(go.Bar(
 
 # Customize daily bar chart for filtered data
 fig_daily_filtered.update_layout(
-    title='Daily Units Won / Lost (Units >= 3)',
+    title='Daily Units Won / Lost (Units >= 2)',
     xaxis_title='Date',
     yaxis_title='Units Won / Lost',
     showlegend=False,
     template='plotly_white',
     xaxis_tickangle=-45,
 )
+
+# Summary stats
+w_count = (df_filtered['Win_Loss_Push'] == 'w').sum()
+l_count = (df_filtered['Win_Loss_Push'] == 'l').sum()
+p_count = (df_filtered['Win_Loss_Push'] == 'p').sum()
+total_records = w_count + l_count + p_count  # Total wins, losses, and pushes
+
+win_percentage = (w_count / total_records) * 100 if total_records > 0 else 0
+total_units = df_filtered['Units_W_L'].sum()
+
+#st.image('legup.png', width = 200)
+st.header("Summary Statistics >2U")
+
+col1, col2, col3, col4, col5 = st.columns(5)
+
+with col1:
+    st.metric("Total Wins", w_count)
+    
+with col2:
+    st.metric("Total Losses", l_count)
+
+with col3:
+    st.metric("Total Pushes", p_count)
+
+with col4:
+    st.metric("Win Percentage", f"{win_percentage:.2f}%")
+
+with col5:
+    st.metric("Total Units", f"{total_units:.2f}")
 
 # Display the weekly and daily charts with unique keys
 st.plotly_chart(fig_daily, key='daily_chart')
