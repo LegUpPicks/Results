@@ -126,7 +126,7 @@ fig_weekly.update_layout(
 )
 
 # Filter data where Units_W_L is greater than or equal to 2
-df_filtered = df[df['Units_W_L'] >= 2]
+df_filtered = df[df['Units'] >= 2]
 
 # Sum the filtered Units_W_L for each day
 df_daily_filtered_sum = df_filtered.groupby('Date')['Units_W_L'].sum().reset_index()
