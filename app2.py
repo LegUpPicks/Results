@@ -154,9 +154,6 @@ fig_daily_filtered.update_layout(
     xaxis_tickangle=-45,
 )
 
-# Display the filtered daily chart
-st.plotly_chart(fig_daily_filtered, key='daily_filtered_chart')
-
 # Display the weekly and daily charts with unique keys
 st.plotly_chart(fig_daily, key='daily_chart')
 st.plotly_chart(fig_daily_filtered, key='daily_filtered_chart')  # Unique key
