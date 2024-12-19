@@ -155,12 +155,12 @@ fig_daily_filtered.update_layout(
 )
 
 # Display the filtered daily chart
-st.plotly_chart(fig_daily_filtered)
+st.plotly_chart(fig_daily_filtered, key='daily_filtered_chart')
 
-# Display the weekly and daily charts
-st.plotly_chart(fig_daily)  # Display daily chart below the weekly chart
-st.plotly_chart(fig_daily_filtered)
-st.plotly_chart(fig_weekly)  # Display weekly chart above the daily chart
+# Display the weekly and daily charts with unique keys
+st.plotly_chart(fig_daily, key='daily_chart')
+st.plotly_chart(fig_daily_filtered, key='daily_filtered_chart')  # Unique key
+st.plotly_chart(fig_weekly, key='weekly_chart')  # Unique key
 
 # Summary table
 summary_table = df.groupby('Sport')['Units_W_L'].sum().reset_index()
@@ -195,4 +195,4 @@ fig.update_layout(
 )
 
 # Display the plot
-st.plotly_chart(fig)
+st.plotly_chart(fig, key='cumulative_chart')
