@@ -125,8 +125,41 @@ fig_weekly.update_layout(
     xaxis_tickangle=-45,
 )
 
+# Filter data where Units_W_L is greater than or equal to 3
+df_filtered = df[df['Units_W_L'] >= 3]
+
+# Sum the filtered Units_W_L for each day
+df_daily_filtered_sum = df_filtered.groupby('Date')['Units_W_L'].sum().reset_index()
+
+# Create Daily Bar Chart using Plotly for filtered data
+fig_daily_filtered = go.Figure()
+
+# Add bars for positive and negative Units_W_L (Green for wins, Red for losses)
+fig_daily_filtered.add_trace(go.Bar(
+    x=df_daily_filtered_sum['Date'],
+    y=df_daily_filtered_sum['Units_W_L'],
+    marker=dict(color=df_daily_filtered_sum['Units_W_L'].apply(lambda x: 'green' if x > 0 else 'red')),
+    text=df_daily_filtered_sum['Units_W_L'].round(2),
+    textposition='auto',
+    hoverinfo='x+y+text',
+))
+
+# Customize daily bar chart for filtered data
+fig_daily_filtered.update_layout(
+    title='Daily Units Won / Lost (Units >= 3)',
+    xaxis_title='Date',
+    yaxis_title='Units Won / Lost',
+    showlegend=False,
+    template='plotly_white',
+    xaxis_tickangle=-45,
+)
+
+# Display the filtered daily chart
+st.plotly_chart(fig_daily_filtered)
+
 # Display the weekly and daily charts
 st.plotly_chart(fig_daily)  # Display daily chart below the weekly chart
+st.plotly_chart(fig_daily_filtered)
 st.plotly_chart(fig_weekly)  # Display weekly chart above the daily chart
 
 # Summary table
