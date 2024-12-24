@@ -15,7 +15,7 @@ url = "https://docs.google.com/spreadsheets/d/1cZvi2XmgW1NkKwUz2DxbjhWSkNjJfFTg3
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 df = conn.read(spreadsheet=url, usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-
+2
 df['Date'] = pd.to_datetime(df['Date'])
 df = df[df['User']=='Jarid']
 
@@ -164,7 +164,7 @@ win_percentage = (w_count / total_records) * 100 if total_records > 0 else 0
 total_units = df_filtered['Units_W_L'].sum()
 
 #st.image('legup.png', width = 200)
-st.header("Summary Statistics 2U or greater")
+st.header("Summary Statistics Side Plays")
 
 col1, col2, col3, col4, col5 = st.columns(5)
 
