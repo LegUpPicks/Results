@@ -14,7 +14,7 @@ url = "https://docs.google.com/spreadsheets/d/1cZvi2XmgW1NkKwUz2DxbjhWSkNjJfFTg3
 
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-df = conn.read(spreadsheet=url, usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8])
+df = conn.read(spreadsheet=url, usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 df['Date'] = pd.to_datetime(df['Date'])
 df = df[df['User']=='Jarid']
@@ -125,8 +125,8 @@ fig_weekly.update_layout(
     xaxis_tickangle=-45,
 )
 
-# Filter data where Units_W_L is greater than or equal to 2
-df_filtered = df[df['Units'] >= 2]
+# Filter data for side plays
+df_filtered = df[df['Side_Plays'] = 1]
 
 # Sum the filtered Units_W_L for each day
 df_daily_filtered_sum = df_filtered.groupby('Date')['Units_W_L'].sum().reset_index()
@@ -146,7 +146,7 @@ fig_daily_filtered.add_trace(go.Bar(
 
 # Customize daily bar chart for filtered data
 fig_daily_filtered.update_layout(
-    title='Daily Units Won / Lost (Units >= 2)',
+    title='Daily Units Won / Lost Side Plays',
     xaxis_title='Date',
     yaxis_title='Units Won / Lost',
     showlegend=False,
