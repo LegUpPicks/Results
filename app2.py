@@ -126,7 +126,7 @@ fig_weekly.update_layout(
 )
 
 # Filter data for side plays
-df_filtered = df[df['Side_Plays'] == 1]
+df_filtered = df[df['Side_Play'] == 1]
 
 # Sum the filtered Units_W_L for each day
 df_daily_filtered_sum = df_filtered.groupby('Date')['Units_W_L'].sum().reset_index()
