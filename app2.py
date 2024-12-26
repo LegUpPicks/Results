@@ -15,6 +15,10 @@ url = "https://docs.google.com/spreadsheets/d/1cZvi2XmgW1NkKwUz2DxbjhWSkNjJfFTg3
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 df = conn.read(spreadsheet=url, usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+# Remove rows where the 'User' column is NaN
+df = df.dropna(subset=['User'])
+
 df['Date'] = pd.to_datetime(df['Date'])
 
 # Sidebar filters
