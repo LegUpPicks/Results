@@ -60,7 +60,7 @@ avg_odds_overall = df['Odds'].mean() if not df['Odds'].isnull().all() else 0
 avg_odds_potd = df_potd_2024['Odds'].mean() if not df_potd_2024['Odds'].isnull().all() else 0
 
 # Display 2024 Summary Statistics for Overall
-st.header("Summary Statistics (2024)")
+st.header("Summary Statistics (September 2024- Dec 2024)")
 
 col1, col2, col3, col4, col5, col6 = st.columns(6)
 
