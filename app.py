@@ -116,15 +116,15 @@ else:
 df_2025 = df[df['Date'].dt.year == 2025]
 
 
-df_filtered['Date'] = df_filtered['Date'].dt.strftime('%m/%d/%Y')
+#df_filtered['Date'] = df_filtered['Date'].dt.strftime('%m/%d/%Y')
 df_filtered = df_filtered.sort_values(by='Date', ascending=False)
 st.dataframe(df_filtered)
 
-# # Cumulative units for 2025 data
-# df_cumulative_2025 = df_2025.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
-# df_cumulative_2025.rename(columns={'Units_W_L': 'Units'}, inplace=True)
-# y_min_2025 = df_cumulative_2025['Units'].min() - 10
-# y_max_2025 = df_cumulative_2025['Units'].max() + 10
+# Cumulative units for 2025 data
+df_cumulative_2025 = df_2025.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
+df_cumulative_2025.rename(columns={'Units_W_L': 'Units'}, inplace=True)
+y_min_2025 = df_cumulative_2025['Units'].min() - 10
+y_max_2025 = df_cumulative_2025['Units'].max() + 10
 
 # # Sum the Units win/loss for each day in 2025
 # df_daily_sum_2025 = df_2025.groupby('Date')['Units_W_L'].sum().reset_index()
@@ -189,11 +189,33 @@ st.dataframe(df_filtered)
 
 # st.subheader("Units Summary by Sport (2025)")
 # st.table(summary_table_2025)
+# Cumulative units for 2025 data
+df_2025['Sport'] = df_2025['Sport'].astype(str)
+df_cumulative_2025_sport = df_2025.groupby(['Date', 'Sport'])['Units_W_L'].sum().reset_index()
 
-# fig_2025 = px.line(df_cumulative_2025, x='Date', y='Units', title='Cumulative Units Over Time (2025)')
-# fig_2025.update_layout(
-#     yaxis=dict(
-#         range=[y_min_2025, y_max_2025]
-#     )
-# )
-# st.plotly_chart(fig_2025)
+# Sort by 'Sport' and 'Date' before calculating cumulative sum to ensure correct order
+df_cumulative_2025_sport = df_cumulative_2025_sport.sort_values(by=['Sport', 'Date'])
+
+# Calculate cumulative sum for each 'Sport' after sorting
+df_cumulative_2025_sport['Units'] = df_cumulative_2025_sport.groupby('Sport')['Units_W_L'].cumsum()
+df_cumulative_2025_sport.drop(columns=['Units_W_L'], inplace=True)
+
+y_min_2025_s = df_cumulative_2025_sport['Units'].min() - 10
+y_max_2025_s = df_cumulative_2025_sport['Units'].max() + 10
+
+
+fig_2025 = px.line(df_cumulative_2025_sport, x='Date', y='Units', color = 'Sport', title='Cumulative Units Over Time by Sport(2025)')
+fig_2025.update_layout(
+    yaxis=dict(
+        range=[y_min_2025_s, y_max_2025_s]
+    )
+)
+st.plotly_chart(fig_2025)
+
+fig_2025 = px.line(df_cumulative_2025, x='Date', y='Units', title='Cumulative Units Over Time (2025)')
+fig_2025.update_layout(
+    yaxis=dict(
+        range=[y_min_2025, y_max_2025]
+    )
+)
+st.plotly_chart(fig_2025)
