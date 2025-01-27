@@ -120,6 +120,29 @@ df_filtered = df_filtered.sort_values(by='Date', ascending=False)
 df_filtered['Date'] = df_filtered['Date'].dt.date
 st.dataframe(df_filtered)
 
+
+#POTD record
+
+
+df_sorted = df.sort_values(by=['Date', 'Units', 'Units_W_L'], ascending=[True, False, False])
+
+# Then, drop duplicates based on 'Date' and keep the first (which will be the highest units, and in case of a tie, highest Units_W_L)
+df_potd = df_sorted.drop_duplicates(subset='Date', keep='first')
+
+df_cumulative = df_potd.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
+df_cumulative.rename(columns={'Units_W_L': 'Units'}, inplace=True)
+y_min_2025_all = df_cumulative['Units'].min() - 10
+y_max_2025_all = df_cumulative['Units'].max() + 10
+
+fig_main = px.line(df_cumulative, x='Date', y='Units', title='Cumulative Units Over Time POTD')
+fig_main.update_layout(
+    yaxis=dict(
+        range=[y_min_2025_all, y_max_2025_all]
+    )
+)
+st.plotly_chart(fig_main)
+
+
 # Cumulative units for 2025 data
 df_cumulative_2025 = df_2025.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
 df_cumulative_2025.rename(columns={'Units_W_L': 'Units'}, inplace=True)
@@ -243,24 +266,3 @@ summary_table = summary_table.sort_values(by='Units', ascending=False)
 
 st.subheader("Units Summary by Sport (Main Plays)")
 st.table(summary_table)
-
-#POTD record
-
-
-df_sorted = df.sort_values(by=['Date', 'Units', 'Units_W_L'], ascending=[True, False, False])
-
-# Then, drop duplicates based on 'Date' and keep the first (which will be the highest units, and in case of a tie, highest Units_W_L)
-df_potd = df_sorted.drop_duplicates(subset='Date', keep='first')
-
-df_cumulative = df_potd.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
-df_cumulative.rename(columns={'Units_W_L': 'Units'}, inplace=True)
-y_min_2025_all = df_cumulative['Units'].min() - 10
-y_max_2025_all = df_cumulative['Units'].max() + 10
-
-fig_main = px.line(df_cumulative, x='Date', y='Units', title='Cumulative Units Over Time POTD')
-fig_main.update_layout(
-    yaxis=dict(
-        range=[y_min_2025_all, y_max_2025_all]
-    )
-)
-st.plotly_chart(fig_main)
