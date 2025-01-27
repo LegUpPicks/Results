@@ -60,7 +60,7 @@ avg_odds_overall = df['Odds'].mean() if not df['Odds'].isnull().all() else 0
 avg_odds_potd = df_potd_2024['Odds'].mean() if not df_potd_2024['Odds'].isnull().all() else 0
 
 # Display 2024 Summary Statistics for Overall
-st.header("Summary Statistics (September 2024- Dec 2024)")
+st.header("Summary Statistics (2024)")
 
 col1, col2, col3, col4, col5, col6 = st.columns(6)
 
@@ -116,107 +116,151 @@ else:
 df_2025 = df[df['Date'].dt.year == 2025]
 
 
-#df_filtered['Date'] = df_filtered['Date'].dt.strftime('%m/%d/%Y')
 df_filtered = df_filtered.sort_values(by='Date', ascending=False)
+df_filtered['Date'] = df_filtered['Date'].dt.date
 st.dataframe(df_filtered)
 
 # Cumulative units for 2025 data
-df_2025 = df_2025[df_2025['POTD'] == 1]
 df_cumulative_2025 = df_2025.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
 df_cumulative_2025.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 y_min_2025 = df_cumulative_2025['Units'].min() - 10
 y_max_2025 = df_cumulative_2025['Units'].max() + 10
 
-# # Sum the Units win/loss for each day in 2025
-# df_daily_sum_2025 = df_2025.groupby('Date')['Units_W_L'].sum().reset_index()
+# Sum the Units win/loss for each day in 2025
+df_daily_sum_2025 = df_2025.groupby('Date')['Units_W_L'].sum().reset_index()
 
-# # Daily units chart for 2025
-# fig_daily_2025 = go.Figure()
+# Daily units chart for 2025
+fig_daily_2025 = go.Figure()
 
-# fig_daily_2025.add_trace(go.Bar(
-#     x=df_daily_sum_2025['Date'],
-#     y=df_daily_sum_2025['Units_W_L'],
-#     marker=dict(color=df_daily_sum_2025['Units_W_L'].apply(lambda x: 'green' if x > 0 else 'red')),
-#     text=df_daily_sum_2025['Units_W_L'].round(2),
-#     textposition='auto',
-#     hoverinfo='x+y+text',
-# ))
+fig_daily_2025.add_trace(go.Bar(
+    x=df_daily_sum_2025['Date'],
+    y=df_daily_sum_2025['Units_W_L'],
+    marker=dict(color=df_daily_sum_2025['Units_W_L'].apply(lambda x: 'green' if x > 0 else 'red')),
+    text=df_daily_sum_2025['Units_W_L'].round(2),
+    textposition='auto',
+    hoverinfo='x+y+text',
+))
 
-# fig_daily_2025.update_layout(
-#     title='Daily Units Won / Lost (2025)',
-#     xaxis_title='Date',
-#     yaxis_title='Units Won / Lost',
-#     showlegend=False,
-#     template='plotly_white',
-#     xaxis_tickangle=-45,
-# )
+fig_daily_2025.update_layout(
+    title='Daily Units Won / Lost (2025)',
+    xaxis_title='Date',
+    yaxis_title='Units Won / Lost',
+    showlegend=False,
+    template='plotly_white',
+    xaxis_tickangle=-45,
+)
 
-# # Weekly units chart for 2025
-# df_2025['Week'] = df_2025['Date'].dt.to_period('W').dt.start_time
-# df_weekly_sum_2025 = df_2025.groupby('Week')['Units_W_L'].sum().reset_index()
+# Weekly units chart for 2025
+df_2025['Week'] = df_2025['Date'].dt.to_period('W').dt.start_time
+df_weekly_sum_2025 = df_2025.groupby('Week')['Units_W_L'].sum().reset_index()
 
-# fig_weekly_2025 = go.Figure()
+fig_weekly_2025 = go.Figure()
 
-# fig_weekly_2025.add_trace(go.Bar(
-#     x=df_weekly_sum_2025['Week'],
-#     y=df_weekly_sum_2025['Units_W_L'],
-#     marker=dict(color=df_weekly_sum_2025['Units_W_L'].apply(lambda x: 'green' if x > 0 else 'red')),
-#     text=df_weekly_sum_2025['Units_W_L'].round(2),
-#     textposition='auto',
-#     hoverinfo='x+y+text',
-# ))
+fig_weekly_2025.add_trace(go.Bar(
+    x=df_weekly_sum_2025['Week'],
+    y=df_weekly_sum_2025['Units_W_L'],
+    marker=dict(color=df_weekly_sum_2025['Units_W_L'].apply(lambda x: 'green' if x > 0 else 'red')),
+    text=df_weekly_sum_2025['Units_W_L'].round(2),
+    textposition='auto',
+    hoverinfo='x+y+text',
+))
 
-# fig_weekly_2025.update_layout(
-#     title='Weekly Units Won / Lost (2025)',
-#     xaxis_title='Week',
-#     yaxis_title='Units Won / Lost',
-#     showlegend=False,
-#     template='plotly_white',
-#     xaxis_tickangle=-45,
-# )
+fig_weekly_2025.update_layout(
+    title='Weekly Units Won / Lost (2025)',
+    xaxis_title='Week',
+    yaxis_title='Units Won / Lost',
+    showlegend=False,
+    template='plotly_white',
+    xaxis_tickangle=-45,
+)
 
-# # Display the daily and weekly charts for 2025
-# st.plotly_chart(fig_daily_2025)  # Display daily chart
+# Display the daily and weekly charts for 2025
+st.plotly_chart(fig_daily_2025)  # Display daily chart
 # st.plotly_chart(fig_weekly_2025)  # Display weekly chart
 
-# # Filter for 2025 data
-# df_2025 = df[df['Date'].dt.year == 2025]
-
-# # Units Summary by Sport for 2025
-# summary_table_2025 = df_2025.groupby('Sport')['Units_W_L'].sum().reset_index()
-# summary_table_2025.rename(columns={'Units_W_L': 'Units'}, inplace=True)
-# summary_table_2025['Units'] = summary_table_2025['Units'].round(2)
-# summary_table_2025 = summary_table_2025.sort_values(by='Units', ascending=False)
-
-# st.subheader("Units Summary by Sport (2025)")
-# st.table(summary_table_2025)
-# Cumulative units for 2025 data
-df_2025['Sport'] = df_2025['Sport'].astype(str)
-df_cumulative_2025_sport = df_2025.groupby(['Date', 'Sport'])['Units_W_L'].sum().reset_index()
-
-# Sort by 'Sport' and 'Date' before calculating cumulative sum to ensure correct order
-df_cumulative_2025_sport = df_cumulative_2025_sport.sort_values(by=['Sport', 'Date'])
-
-# Calculate cumulative sum for each 'Sport' after sorting
-df_cumulative_2025_sport['Units'] = df_cumulative_2025_sport.groupby('Sport')['Units_W_L'].cumsum()
-df_cumulative_2025_sport.drop(columns=['Units_W_L'], inplace=True)
-
-y_min_2025_s = df_cumulative_2025_sport['Units'].min() - 10
-y_max_2025_s = df_cumulative_2025_sport['Units'].max() + 10
-
-
-# fig_2025 = px.line(df_cumulative_2025_sport, x='Date', y='Units', color = 'Sport', title='Cumulative Units Over Time by Sport(2025)')
+# fig_2025 = px.line(df_cumulative_2025, x='Date', y='Units', title='Cumulative Units Over Time (2025)')
 # fig_2025.update_layout(
 #     yaxis=dict(
-#         range=[y_min_2025_s, y_max_2025_s]
+#         range=[y_min_2025, y_max_2025]
 #     )
 # )
 # st.plotly_chart(fig_2025)
 
-fig_2025 = px.line(df_cumulative_2025, x='Date', y='Units', title='POTD Cummulative Units Over Time (2025)')
-fig_2025.update_layout(
+
+# Overall cummulative 
+
+# Load the data from the Google sheet
+url = "https://docs.google.com/spreadsheets/d/1NDkmrYu2EezsJg3OTCeDueQRZx6LzMBYeNVFdxOVYT4/edit?usp=sharing"
+conn = st.connection("gsheets", type=GSheetsConnection)
+df_cs = conn.read(spreadsheet=url, usecols=[1, 2, 3, 4, 5, 6, 7,8])
+df_cs['Date'] = pd.to_datetime(df_cs['Date'])
+
+df = df.iloc[:, :-1]
+all_df = pd.concat([df, df_cs], ignore_index=True)
+
+
+df_cumulative_all = all_df.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
+df_cumulative_all.rename(columns={'Units_W_L': 'Units'}, inplace=True)
+y_min_2025_all = df_cumulative_all['Units'].min() - 10
+y_max_2025_all = df_cumulative_all['Units'].max() + 10
+
+fig_all = px.line(df_cumulative_all, x='Date', y='Units', title='Cumulative Units Over Time All Data')
+fig_all.update_layout(
     yaxis=dict(
-        range=[y_min_2025, y_max_2025]
+        range=[y_min_2025_all, y_max_2025_all]
     )
 )
-st.plotly_chart(fig_2025)
+st.plotly_chart(fig_all)
+
+# Cumulative units for All data
+df_cumulative = df_filtered.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
+df_cumulative.rename(columns={'Units_W_L': 'Units'}, inplace=True)
+y_min_2025_all = df_cumulative['Units'].min() - 10
+y_max_2025_all = df_cumulative['Units'].max() + 10
+
+fig_main = px.line(df_cumulative, x='Date', y='Units', title='Cumulative Units Over Time Main Plays Only')
+fig_main.update_layout(
+    yaxis=dict(
+        range=[y_min_2025_all, y_max_2025_all]
+    )
+)
+st.plotly_chart(fig_main)
+
+# Units Summary by Sport for 2025
+summary_table = all_df.groupby('Sport')['Units_W_L'].sum().reset_index()
+summary_table.rename(columns={'Units_W_L': 'Units'}, inplace=True)
+summary_table['Units'] = summary_table['Units'].round(2)
+summary_table = summary_table.sort_values(by='Units', ascending=False)
+
+st.subheader("Units Summary by Sport (All)")
+st.table(summary_table)
+
+# Units Summary by Sport for 2025
+summary_table = df.groupby('Sport')['Units_W_L'].sum().reset_index()
+summary_table.rename(columns={'Units_W_L': 'Units'}, inplace=True)
+summary_table['Units'] = summary_table['Units'].round(2)
+summary_table = summary_table.sort_values(by='Units', ascending=False)
+
+st.subheader("Units Summary by Sport (Main Plays)")
+st.table(summary_table)
+
+#POTD record
+
+
+df_sorted = df.sort_values(by=['Date', 'Units', 'Units_W_L'], ascending=[True, False, False])
+
+# Then, drop duplicates based on 'Date' and keep the first (which will be the highest units, and in case of a tie, highest Units_W_L)
+df_potd = df_sorted.drop_duplicates(subset='Date', keep='first')
+
+df_cumulative = df_potd.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
+df_cumulative.rename(columns={'Units_W_L': 'Units'}, inplace=True)
+y_min_2025_all = df_cumulative['Units'].min() - 10
+y_max_2025_all = df_cumulative['Units'].max() + 10
+
+fig_main = px.line(df_cumulative, x='Date', y='Units', title='Cumulative Units Over Time POTD')
+fig_main.update_layout(
+    yaxis=dict(
+        range=[y_min_2025_all, y_max_2025_all]
+    )
+)
+st.plotly_chart(fig_main)
