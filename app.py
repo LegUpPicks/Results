@@ -53,6 +53,14 @@ total_records = w_count + l_count + p_count
 win_percentage = (w_count / total_records) * 100 if total_records > 0 else 0
 total_units = df_2024['Units_W_L'].sum()
 
+# Summary stats for overall record
+w_count_all = (df['Win_Loss_Push'] == 'w').sum()
+l_count_all = (df['Win_Loss_Push'] == 'l').sum()
+p_count_all = (df['Win_Loss_Push'] == 'p').sum()
+total_records_all = w_count_all + l_count_all + p_count_all
+win_percentage_all = (w_count_all / total_records_all) * 100 if total_records_all > 0 else 0
+total_units_all = df['Units_W_L'].sum()
+
 # Calculate the average odds for the overall dataset
 avg_odds_overall = df['Odds'].mean() if not df['Odds'].isnull().all() else 0
 
@@ -102,6 +110,7 @@ with col4:
 with col5:
     st.metric("Total Units (POTD)", f"{total_units_potd:.2f}")
 
+st.metric("Win Percentage (All Time)", f"{win_percentage_all:.2f}%")
 
 st.header("Picks Made")
 # Radio button to filter full data by POTD
