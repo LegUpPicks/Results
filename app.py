@@ -127,7 +127,26 @@ df_2025 = df[df['Date'].dt.year == 2025]
 
 df_filtered = df_filtered.sort_values(by='Date', ascending=False)
 df_filtered['Date'] = df_filtered['Date'].dt.date
-st.dataframe(df_filtered)
+
+url = "https://docs.google.com/spreadsheets/d/1NDkmrYu2EezsJg3OTCeDueQRZx6LzMBYeNVFdxOVYT4/edit?usp=sharing"
+conn = st.connection("gsheets", type=GSheetsConnection)
+df_cs = conn.read(spreadsheet=url, usecols=[1, 2, 3, 4, 5, 6, 7,8])
+df_cs['Date'] = pd.to_datetime(df_cs['Date'])
+
+df1 = df.iloc[:, :-1]
+
+all_df = pd.concat([df1, df_cs], ignore_index=True)
+
+if selected_sport != 'All':
+    all_df = all_df[all_df['Sport'] == selected_sport]
+
+if len(date_range) == 2:
+    start_date, end_date = date_range
+    all_df = all_df[(all_df['Date'] >= pd.to_datetime(start_date)) & (all_df['Date'] <= pd.to_datetime(end_date))]
+else:
+    st.sidebar.warning("Please select both start and end dates.")
+
+st.dataframe(all_df)
 
 
 #POTD record
