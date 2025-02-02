@@ -228,7 +228,17 @@ df_cs = conn.read(spreadsheet=url, usecols=[1, 2, 3, 4, 5, 6, 7,8])
 df_cs['Date'] = pd.to_datetime(df_cs['Date'])
 
 df = df.iloc[:, :-1]
+
 all_df = pd.concat([df, df_cs], ignore_index=True)
+
+if selected_sport != 'All':
+    all_df = all_df[all_df['Sport'] == selected_sport]
+
+if len(date_range) == 2:
+    start_date, end_date = date_range
+    all_df = all_df[(all_df['Date'] >= pd.to_datetime(start_date)) & (df['Date'] <= pd.to_datetime(end_date))]
+else:
+    st.sidebar.warning("Please select both start and end dates.")
 
 
 df_cumulative_all = all_df.groupby('Date').agg({'Units_W_L': 'sum'}).cumsum().reset_index()
