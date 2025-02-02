@@ -236,7 +236,7 @@ if selected_sport != 'All':
 
 if len(date_range) == 2:
     start_date, end_date = date_range
-    all_df = all_df[(all_df['Date'] >= pd.to_datetime(start_date)) & (df['Date'] <= pd.to_datetime(end_date))]
+    all_df = all_df[(all_df['Date'] >= pd.to_datetime(start_date)) & (all_df['Date'] <= pd.to_datetime(end_date))]
 else:
     st.sidebar.warning("Please select both start and end dates.")
 
