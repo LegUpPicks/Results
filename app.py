@@ -145,6 +145,9 @@ if len(date_range) == 2:
     all_df = all_df[(all_df['Date'] >= pd.to_datetime(start_date)) & (all_df['Date'] <= pd.to_datetime(end_date))]
 else:
     st.sidebar.warning("Please select both start and end dates.")
+    
+all_df = all_df.sort_values(by='Date', ascending=False)
+all_df['Date'] = all_df['Date'].dt.date
 
 st.dataframe(all_df)
 
