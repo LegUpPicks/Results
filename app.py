@@ -267,8 +267,8 @@ summary_table = summary_table.sort_values(by='Units', ascending=False)
 st.subheader("Units Summary by Sport (All)")
 st.table(summary_table)
 
-# Units Summary by Sport for 2025
-summary_table = df.groupby('Sport')['Units_W_L'].sum().reset_index()
+# Units Summary by Sport
+summary_table = df_filtered.groupby('Sport')['Units_W_L'].sum().reset_index()
 summary_table.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 summary_table['Units'] = summary_table['Units'].round(2)
 summary_table = summary_table.sort_values(by='Units', ascending=False)
