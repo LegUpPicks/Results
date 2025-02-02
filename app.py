@@ -246,7 +246,7 @@ df_cumulative_all.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 y_min_2025_all = df_cumulative_all['Units'].min() - 10
 y_max_2025_all = df_cumulative_all['Units'].max() + 10
 
-fig_all = px.line(df_cumulative_all, x='Date', y='Units', title='Cumulative Units Over Time All Data')
+fig_all = px.line(df_cumulative_all, x='Date', y='Units', title=f'Cumulative Units Over Time All Data ({selected_sport})')
 fig_all.update_layout(
     yaxis=dict(
         range=[y_min_2025_all, y_max_2025_all]
