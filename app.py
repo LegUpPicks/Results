@@ -305,5 +305,5 @@ summary_table.rename(columns={'Units_W_L': 'Units'}, inplace=True)
 summary_table['Units'] = summary_table['Units'].round(2)
 summary_table = summary_table.sort_values(by='Units', ascending=False)
 
-st.subheader("Units Summary by Sport (Main Plays)")
-st.table(summary_table)
+# st.subheader("Units Summary by Sport (Main Plays)")
+# st.table(summary_table)
