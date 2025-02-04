@@ -70,47 +70,47 @@ avg_odds_potd = df_potd_2024['Odds'].mean() if not df_potd_2024['Odds'].isnull()
 # Display 2024 Summary Statistics for Overall
 st.header("Summary Statistics (2024)")
 
-col1, col2, col3, col4, col5, col6 = st.columns(6)
+# col1, col2, col3, col4, col5, col6 = st.columns(6)
 
-with col1:
-    st.metric("Total Wins", w_count)
+# with col1:
+#     st.metric("Total Wins", w_count)
     
-with col2:
-    st.metric("Total Losses", l_count)
+# with col2:
+#     st.metric("Total Losses", l_count)
 
-with col3:
-    st.metric("Total Pushes", p_count)
+# with col3:
+#     st.metric("Total Pushes", p_count)
 
-with col4:
-    st.metric("Win Percentage", f"{win_percentage:.2f}%")
+# with col4:
+#     st.metric("Win Percentage", f"{win_percentage:.2f}%")
 
-with col5:
-    st.metric("Total Units", f"{total_units:.2f}")
+# with col5:
+#     st.metric("Total Units", f"{total_units:.2f}")
 
-with col6:
-    st.metric("Average Odds (Overall)", f"{avg_odds_overall:.2f}")
+# with col6:
+#     st.metric("Average Odds (Overall)", f"{avg_odds_overall:.2f}")
 
 
-st.header("POTD Summary Statistics (2024)")
+# st.header("POTD Summary Statistics (2024)")
 
-col1, col2, col3, col4, col5 = st.columns(5)
+# col1, col2, col3, col4, col5 = st.columns(5)
 
-with col1:
-    st.metric("Total Wins (POTD)", w_count_potd)
+# with col1:
+#     st.metric("Total Wins (POTD)", w_count_potd)
     
-with col2:
-    st.metric("Total Losses (POTD)", l_count_potd)
+# with col2:
+#     st.metric("Total Losses (POTD)", l_count_potd)
 
-with col3:
-    st.metric("Total Pushes (POTD)", p_count_potd)
+# with col3:
+#     st.metric("Total Pushes (POTD)", p_count_potd)
 
-with col4:
-    st.metric("Win Percentage (POTD)", f"{win_percentage_potd:.2f}%")
+# with col4:
+#     st.metric("Win Percentage (POTD)", f"{win_percentage_potd:.2f}%")
 
-with col5:
-    st.metric("Total Units (POTD)", f"{total_units_potd:.2f}")
+# with col5:
+#     st.metric("Total Units (POTD)", f"{total_units_potd:.2f}")
 
-st.metric("Win Percentage (All Time)", f"{win_percentage_all:.2f}%")
+# st.metric("Win Percentage (All Time)", f"{win_percentage_all:.2f}%")
 
 st.header("Picks Made")
 # Radio button to filter full data by POTD
@@ -288,7 +288,7 @@ fig_main.update_layout(
         range=[y_min_2025_all, y_max_2025_all]
     )
 )
-st.plotly_chart(fig_main)
+#st.plotly_chart(fig_main)
 
 # Units Summary by Sport for 2025
 summary_table = all_df.groupby('Sport')['Units_W_L'].sum().reset_index()
