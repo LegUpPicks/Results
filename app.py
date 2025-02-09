@@ -54,12 +54,12 @@ win_percentage = (w_count / total_records) * 100 if total_records > 0 else 0
 total_units = df_2024['Units_W_L'].sum()
 
 # Summary stats for overall record
-w_count_all = (df['Win_Loss_Push'] == 'w').sum()
-l_count_all = (df['Win_Loss_Push'] == 'l').sum()
-p_count_all = (df['Win_Loss_Push'] == 'p').sum()
-total_records_all = w_count_all + l_count_all + p_count_all
-win_percentage_all = (w_count_all / total_records_all) * 100 if total_records_all > 0 else 0
-total_units_all = df['Units_W_L'].sum()
+# w_count_all = (df['Win_Loss_Push'] == 'w').sum()
+# l_count_all = (df['Win_Loss_Push'] == 'l').sum()
+# p_count_all = (df['Win_Loss_Push'] == 'p').sum()
+# total_records_all = w_count_all + l_count_all + p_count_all
+# win_percentage_all = (w_count_all / total_records_all) * 100 if total_records_all > 0 else 0
+# total_units_all = df['Units_W_L'].sum()
 
 # Calculate the average odds for the overall dataset
 avg_odds_overall = df['Odds'].mean() if not df['Odds'].isnull().all() else 0
@@ -148,6 +148,38 @@ else:
     
 all_df = all_df.sort_values(by='Date', ascending=False)
 all_df['Date'] = all_df['Date'].dt.date
+
+
+w_count_all = (all_df['Win_Loss_Push'] == 'w').sum()
+l_count_all = (all_df['Win_Loss_Push'] == 'l').sum()
+p_count_all = (all_df['Win_Loss_Push'] == 'p').sum()
+total_records_all = w_count_all + l_count_all + p_count_all
+win_percentage_all = (w_count_all / total_records_all) * 100 if total_records_all > 0 else 0
+total_units_all = all_df['Units_W_L'].sum()
+
+
+st.header("Summary Statistics")
+
+col1, col2, col3, col4, col5, col6 = st.columns(6)
+
+with col1:
+    st.metric("Total Wins", w_count)
+    
+with col2:
+    st.metric("Total Losses", l_count)
+
+with col3:
+    st.metric("Total Pushes", p_count)
+
+with col4:
+    st.metric("Win Percentage", f"{win_percentage:.2f}%")
+
+with col5:
+    st.metric("Total Units", f"{total_units:.2f}")
+
+with col6:
+    st.metric("Average Odds (Overall)", f"{avg_odds_overall:.2f}")
+
 
 st.dataframe(all_df)
 
