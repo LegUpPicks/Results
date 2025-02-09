@@ -163,22 +163,19 @@ st.header("Summary Statistics")
 col1, col2, col3, col4, col5, col6 = st.columns(6)
 
 with col1:
-    st.metric("Total Wins", w_count)
+    st.metric("Total Wins", w_count_all)
     
 with col2:
-    st.metric("Total Losses", l_count)
+    st.metric("Total Losses", l_count_all)
 
 with col3:
-    st.metric("Total Pushes", p_count)
+    st.metric("Total Pushes", p_count_all)
 
 with col4:
-    st.metric("Win Percentage", f"{win_percentage:.2f}%")
+    st.metric("Win Percentage", f"{win_percentage_all:.2f}%")
 
 with col5:
-    st.metric("Total Units", f"{total_units:.2f}")
-
-with col6:
-    st.metric("Average Odds (Overall)", f"{avg_odds_overall:.2f}")
+    st.metric("Total Units", f"{total_units_all:.2f}")
 
 
 st.dataframe(all_df)
@@ -203,7 +200,7 @@ fig_main.update_layout(
         range=[y_min_2025_all, y_max_2025_all]
     )
 )
-st.plotly_chart(fig_main)
+#st.plotly_chart(fig_main)
 
 
 # Cumulative units for 2025 data
