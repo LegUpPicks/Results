@@ -69,17 +69,17 @@ avg_odds_potd = df_potd_2024['Odds'].mean() if not df_potd_2024['Odds'].isnull()
 
 
 st.header("Picks Made")
-# Radio button to filter full data by POTD
-data_filter = st.radio("Filter Data by POTD", ("All Data", "POTD Only"))
+# # Radio button to filter full data by POTD
+# data_filter = st.radio("Filter Data by POTD", ("All Data", "POTD Only"))
 
 
-# # Filter for 2025 data for visuals
-# df_2025 = df[df['Date'].dt.year == 2025]
-if data_filter == "POTD Only":
-    df_filtered = df[df['POTD'] == 1]
-else:
-    df_filtered = df
-
+# # # Filter for 2025 data for visuals
+# # df_2025 = df[df['Date'].dt.year == 2025]
+# if data_filter == "POTD Only":
+#     df_filtered = df[df['POTD'] == 1]
+# else:
+#     df_filtered = df
+df_filtered = df
 # df_filtered = df_filtered.sort_values(by='Date', ascending=False)
 # df_filtered['Date'] = df_filtered['Date'].dt.date
 
