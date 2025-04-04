@@ -19,13 +19,13 @@ df_all = conn.read(spreadsheet=url_all, usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8])
 df = df_all.reset_index(drop=True)
 
 # Filter the DataFrame based on POTD option
-option = st.sidebar.radio(
-    'Choose to view only POTD or All Plays',
-    ('All Picks', 'POTD')
-)
+# option = st.sidebar.radio(
+#     'Choose to view only POTD or All Plays',
+#     ('All Picks', 'POTD')
+# )
 
-if option == 'POTD':
-    df = df[df['POTD'] == 1]
+# if option == 'POTD':
+#     df = df[df['POTD'] == 1]
 
 # Convert the 'Date' column to datetime
 df['Date'] = pd.to_datetime(df['Date'])
